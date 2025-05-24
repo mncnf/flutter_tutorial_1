@@ -67,7 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
         page = GeneratorPage();
         break;
       case 1:
-        page = Placeholder();
+        page = FavoritePage();
         break;
       default:
         throw UnimplementedError('no widget for $selectedIndex');
@@ -108,6 +108,49 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       );
     });
+  }
+}
+
+// favoriteを取得
+// 一覧表示
+class FavoritePage extends StatelessWidget {
+  const FavoritePage({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    var appState = context.watch<MyAppState>();
+    var favorites = appState.favorites;
+
+    if (favorites.isEmpty) {
+      return Center(
+        child: Text('No favorites yet!'),
+      );
+    }
+
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          for (var favorite in favorites)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton.icon(
+                  onPressed: () {
+                    appState.current = favorite;
+                    appState.toggleFavorite();
+                  },
+                  icon: Icon(Icons.favorite),
+                  label: Text('Like'),
+                ),
+                Text(favorite.asCamelCase),
+              ],
+            ),
+        ],
+      ),
+    );
   }
 }
 
